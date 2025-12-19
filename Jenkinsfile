@@ -12,7 +12,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'dockerlogin', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                     sh '''
                     echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-                    docker build -t ${DOCKER_USER}/rfm_frontend:${BUILD_NUMBER}
+                    docker build -t ${DOCKER_USER}/rfm_frontend:${BUILD_NUMBER} .
                     docker tag ${DOCKER_USER}/rfm_frontend:${BUILD_NUMBER} ${DOCKER_USER}/rfm_frontend:latest
                     docker push ${DOCKER_USER}/rfm_frontend:${BUILD_NUMBER}
                     docker push ${DOCKER_USER}/rfm_frontend:latest
