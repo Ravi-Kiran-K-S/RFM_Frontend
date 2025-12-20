@@ -1,0 +1,16 @@
+---
+- name: Deploy RFM Application frontend
+  hosts: webserver
+  vars:
+    # Deployment target directory on remote host
+    deploy_path: "/opt/rfm_app"
+  tasks:
+    # shell
+    - name: pull latest Docker images
+      shell: "cd {{ deploy_path }} && docker compose pull frontend"
+      register: pull_result
+      changed_when: "'Downloaded newer image' in pull_result.stdout"
+    - name: deploy updated containers
+      shell: "cd {{ deploy_path }} && docker compose up -d frontend"
+      register: up_result
+      changed_when: "'Creating' in up_result.stdout or 'Recreating' in up_result.stdout or 'Starting' in up_result.stdout"

@@ -22,4 +22,15 @@ pipeline {
             }
         }
     }
+    post {
+        success {
+            echo "✓ Pipeline completed successfully"
+            sh 'ansible-playbook -i ${ANSIBLE_INVENTORY} deploy-frontend.yml'
+            sh 'docker logout || true'
+            cleanWs()
+        }
+        failure {
+            echo "✗ Pipeline failed. Check logs for details."
+        }
+    }
 }
